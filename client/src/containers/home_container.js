@@ -8,11 +8,71 @@ import moment from 'moment-js';
 
 class HomeContainer extends Component {
 
+    state = {
+        showShowMore: true,        
+    }
+    
     componentDidMount(){
-        this.loadmore()
+        this.loadCriptos(6, "")
     }
 
-    showCriptos = (criptos)=>{
+    changeFilter(filter){        
+        var limit;
+        limit = filter!==""?10000:3
+        this.setState({showShowMore: filter===""})
+        this.loadCriptos(limit,filter)        
+    }
+    
+    loadmore = ()=>{
+        var count=0
+        count = this.props.criptos.list.limit+3
+        
+        this.loadCriptos(count, this.props.criptos.list.filter)
+    }
+
+    loadCriptos(count,filter){
+        this.props.dispatch(getCriptos(0,count,filter))
+    }
+
+    loadfilter = ()=>{
+        this.loadCriptos()
+    }
+
+    renderTitle() {
+        return(
+            <h4>Main Cripto Coins</h4>
+        )
+    }
+
+    renderSearch() {
+        return(
+            <div>
+            <h2>Search: </h2>
+            <input type="text" onChange={event => this.changeFilter(event.target.value)}/>
+            </div>
+        )
+    }
+
+    renderTable(criptos) {
+        return(
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Price</th>
+                        <th>%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        this.renderCriptos(criptos)
+                    }
+                </tbody>
+            </table>
+        )
+    }
+
+    renderCriptos = (criptos)=>{
         console.log(criptos)
         return criptos ? 
             criptos.symbols.map((item,i) => {
@@ -31,68 +91,29 @@ class HomeContainer extends Component {
                         }
                     </td>
                     <td>
+                        <div style={{color: coin.priceChangePercent>=0 ? "#149414":"#ff0000"}} >
                         {
                             coin.priceChangePercent
                         //moment(item.createdAt).format("DD/MM/YYYY")
-
                         }
+                        </div>
                     </td>
                 </tr>
             )})
         :null
     }
 
-    loadmore = (filter)=>{
-        //console.log(filter)
-        let count;
-        if (filter === "") {
-            count = 10000;
+
+    renderShowMore(){
+        if (this.state.showShowMore) {
+            return(
+                <div className="loadmore" onClick={this.loadmore}>
+                    Load More
+                </div>
+            )
         } else {
-            if (this.props.criptos.list) {
-                count = this.props.criptos.list.limit+3;
-            } else {
-                count = 3
-            }
-        }
-         //let list //= this.props.criptos.list;
-         //console.log("jjj")
-        //console.log(count)
-        //console.log(this.props.criptos.list)
-        this.props.dispatch(getCriptos(0,count,filter))
-    }
-
-    renderTitle() {
-        return(
-            <h4>Main Cripto Coins</h4>
-        )
-    }
-
-    renderSearch() {
-        return(
-            <div>
-            <h2>Search: </h2>
-            <input type="text" onChange={event => this.loadmore(event.target.value)}/>
-            </div>
-        )
-    }
-
-    renderTable(criptos) {
-        return(
-            <table>
-                <thead>
-                    <tr>
-                        <th>Symbol</th>
-                        <th>Price</th>
-                        <th>%</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        this.showCriptos(criptos)
-                    }
-                </tbody>
-            </table>
-        )
+            return(null)
+        }        
     }
 
     render() {
@@ -104,10 +125,9 @@ class HomeContainer extends Component {
                     {this.renderTitle()}
                     {this.renderSearch()}
                     {this.renderTable(criptos   )}                
-                </div>                
-                <div className="loadmore" onClick={this.loadmore}>
-                    Load More
                 </div>
+                {this.renderShowMore()}
+                
             </div>
         )
     }

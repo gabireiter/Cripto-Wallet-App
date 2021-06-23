@@ -28,9 +28,9 @@ export function getBookWithReview(id) {
 }
 
 export function getCriptos(
-    start=0,
-    limit=3,
-    filter=""
+    start,
+    limit,
+    filter
     ){
     const request = axios.get(`${BINANCE_API_URL}/api/v3/exchangeInfo`)
 
@@ -65,7 +65,8 @@ export function getCriptos(
                                 .filter(price=>price.symbol.includes(filter))
                                 .slice(start, limit),
                     start,
-                    limit
+                    limit,
+                    filter
                 }
                 dispatch({
                     type: GET_CRIPTOS,
