@@ -29,20 +29,41 @@ export function getBookWithReview(id) {
 
 export function getCriptos(
     start=0,
-    limit=3
+    limit=3,
+    filter=""
     ){
     const request = axios.get(`${BINANCE_API_URL}/api/v3/exchangeInfo`)
 
     return (dispatch)=>{
         request.then(response=> {
-            
-            const symbols = response.data.symbols.filter(symbol=>symbol.quoteAsset === 'USDT').map(item=>item.baseAsset).slice(start, limit)
+            //console.log("rrr")
+            //console.log(typeof filter)            
+            //console.log(filter)
+            //filter = "AD"            
+            //console.log(typeof filter)            
+            //console.log(filter)
+            /*console.log(
+                response.data.symbols
+                .filter(symbol=>symbol.quoteAsset === 'USDT')
+                .filter(symbol=>symbol.baseAsset.includes(filter))
+                .map(item=>item.baseAsset)
+                .slice(start, limit)
+                )
+            */
+            const symbols = response.data.symbols
+                                .filter(symbol=>symbol.quoteAsset === 'USDT')
+                                .filter(symbol=>symbol.baseAsset.includes(filter))
+                                .map(item=>item.baseAsset)
+                                .slice(start, limit)
             //console.log(symbols)
             axios.get(`${BINANCE_API_URL}/api/v3/ticker/24hr`)
             .then(response=> {
                 let objectToRespond = {
                     symbols,
-                    prices: response.data.filter(price=>price.symbol.endsWith('USDT')).slice(start, limit),
+                    prices: response.data
+                                .filter(price=>price.symbol.endsWith('USDT'))
+                                .filter(price=>price.symbol.includes(filter))
+                                .slice(start, limit),
                     start,
                     limit
                 }
