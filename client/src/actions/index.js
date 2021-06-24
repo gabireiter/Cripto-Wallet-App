@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {GET_CRIPTOS} from './types'
+import {GET_CRIPTOS,GET_USER_WALLET} from './types'
 //import { useStore } from 'react-redux'
 //import { response } from 'express'
 const BINANCE_API_URL = "https://api.binance.com"
@@ -28,28 +28,25 @@ export function getBookWithReview(id) {
 }
 
 export function getCriptos(
-    start,
-    limit,
-    filter
+    start=0,
+    limit=10000,
+    filter=""
     ){
     const request = axios.get(`${BINANCE_API_URL}/api/v3/exchangeInfo`)
-
+    
+    
     return (dispatch)=>{
         request.then(response=> {
-            //console.log("rrr")
-            //console.log(typeof filter)            
-            //console.log(filter)
-            //filter = "AD"            
-            //console.log(typeof filter)            
-            //console.log(filter)
-            /*console.log(
-                response.data.symbols
-                .filter(symbol=>symbol.quoteAsset === 'USDT')
-                .filter(symbol=>symbol.baseAsset.includes(filter))
-                .map(item=>item.baseAsset)
-                .slice(start, limit)
-                )
-            */
+
+            // console.log("yyy")
+            // console.log(filter)
+            // console.log(typeof filter)
+            // console.log(response.data.symbols
+            //     .filter(symbol=>symbol.quoteAsset === 'USDT'))
+            // console.log(response.data.symbols
+            //         .filter(symbol=>symbol.quoteAsset === 'USDT')
+            //         .filter(symbol=>symbol.baseAsset.includes("AD")))
+    
             const symbols = response.data.symbols
                                 .filter(symbol=>symbol.quoteAsset === 'USDT')
                                 .filter(symbol=>symbol.baseAsset.includes(filter))
@@ -74,6 +71,16 @@ export function getCriptos(
                 })
             })  
         })
+    }
+}
+
+export function getUserWallet(userId){
+    const request = axios.get(`/api/getWalletCoins?user_id=${userId}`)
+                    .then(response => response.data)
+
+    return {
+        type:GET_USER_WALLET,
+        payload:request
     }
 }
 

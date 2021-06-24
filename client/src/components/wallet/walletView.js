@@ -1,24 +1,23 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {getCriptos} from '../actions/index'
+import {getCriptos, getUserWallet} from '../../actions/index'
 import { Link } from 'react-router-dom';
 import moment from 'moment-js';
 
-//import BookItem from '../widgetsUI/book_item'
-
-class HomeContainer extends Component {
+class WalletView extends Component {
 
     state = {
         showShowMore: true,        
     }
     
     componentDidMount(){
-        this.loadCriptos(6, "")
+        this.props.dispatch(getCriptos())
+        this.props.dispatch(getUserWallet(this.props.user.login.id))
     }
 
     changeFilter(filter){        
         var limit;
-        limit = filter!==""?10000:6
+        limit = filter!==""?10000:3
         this.setState({showShowMore: filter===""})
         this.loadCriptos(limit,filter)        
     }
@@ -126,7 +125,6 @@ class HomeContainer extends Component {
                     {this.renderSearch()}
                     {this.renderTable(criptos   )}                
                 </div>
-                {this.renderShowMore()}
                 
             </div>
         )
@@ -134,12 +132,12 @@ class HomeContainer extends Component {
 }
 
 function mapStateToProps(state) {
-    //console.log("aaa")
-    //console.log(state)
+    console.log("kkk")
+    console.log(state)
     return {
-        criptos: state.cripto
+        criptos: state.cripto,
+        wallet: state.wallet
     }
 }
 
-export default connect(mapStateToProps)(HomeContainer) ;
-//export default HomeContainer
+export default connect(mapStateToProps)(WalletView) ;

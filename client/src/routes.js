@@ -7,7 +7,7 @@ import Layout from './hoc/layout'
 import Login from './containers/admin/login'
 import User from './components/admin'   
 import AddReview from './containers/admin/add'   
-import UserPosts from './components/admin/userposts';
+import UserWallet from './components/wallet/walletView';
 import EditReview from './containers/admin/edit';
 import Register from './containers/admin/register'
 import Logout from './components/admin/logout'
@@ -26,7 +26,7 @@ const Routes = () => {
                     <Route path="/user/register" exact component={Auth(Register,true)}/>
                     <Route path="/user/edit-post/:id" exact component={Auth(EditReview,true)}/>
                     <Route path="/books/:id" component={Auth(BookView)}/>                    
-                    <Route path="/user/user-wallet" exact component={Auth(UserPosts,true)}/>
+                    <Route path="/user/user-wallet" exact component={Auth(UserWallet,true)}/>
                 </Switch>
             </Layout>
         )

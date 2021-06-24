@@ -1,11 +1,11 @@
-import {GET_CRIPTOS} from '../actions/types'
+import {GET_CRIPTOS,GET_USER_WALLET} from '../actions/types'
 
 export default function foo(state={},action) {
     switch (action.type) {
         case GET_CRIPTOS:
             return {...state,list: action.payload}
-        case 'GET_BOOK':
-            return {...state,book:action.payload}        
+        case GET_USER_WALLET:
+            return {...state,wallet:action.payload}        
         case 'GET_BOOK_W_REVIEWER':
             return {
                 ...state,
