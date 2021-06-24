@@ -75,7 +75,7 @@ export function getCriptos(
 }
 
 export function getUserWallet(userId){
-    const request = axios.get(`/api/getWalletCoins?user_id=${userId}`)
+    const request = axios.get(`/api/GetWalletCoins?user_id=${userId}`)
                     .then(response => response.data)
 
     return {

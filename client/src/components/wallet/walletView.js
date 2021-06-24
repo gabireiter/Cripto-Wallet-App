@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {getCriptos, getUserWallet} from '../../actions/index'
-import { Link } from 'react-router-dom';
-import moment from 'moment-js';
+import {getCriptos,getUserWallet} from '../../actions'
+
+//import BookItem from '../widgetsUI/book_item'
 
 class WalletView extends Component {
 
@@ -11,13 +11,13 @@ class WalletView extends Component {
     }
     
     componentDidMount(){
-        this.props.dispatch(getCriptos())
+        this.loadCriptos()
         this.props.dispatch(getUserWallet(this.props.user.login.id))
     }
 
     changeFilter(filter){        
         var limit;
-        limit = filter!==""?10000:3
+        limit = filter!==""?10000:6
         this.setState({showShowMore: filter===""})
         this.loadCriptos(limit,filter)        
     }
@@ -39,7 +39,7 @@ class WalletView extends Component {
 
     renderTitle() {
         return(
-            <h4>Main Cripto Coins</h4>
+            <h2>My Wallet</h2>
         )
     }
 
@@ -52,41 +52,53 @@ class WalletView extends Component {
         )
     }
 
-    renderTable(criptos) {
+    renderTable(criptos,wallet) {
         return(
             <table>
                 <thead>
                     <tr>
                         <th>Symbol</th>
                         <th>Price</th>
+                        <th>Qty</th>
+                        <th>Total</th>
                         <th>%</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
-                        this.renderCriptos(criptos)
+                        this.renderCriptos(criptos,wallet)
                     }
                 </tbody>
             </table>
         )
     }
 
-    renderCriptos = (criptos)=>{
+    renderCriptos = (criptos,wallet)=>{
         console.log(criptos)
-        return criptos ? 
-            criptos.symbols.map((item,i) => {
-                const coin = criptos.prices.filter(price=>price.symbol===item+"USDT")[0]
+        console.log(wallet)
+        return wallet && typeof criptos !== "undefined"? 
+            // Loop among all the coins of the wallet
+            wallet.map((item,i) => {
+                //I look for the price of the coin
+                const coin = criptos.prices.filter(price=>price.symbol===item.symbol+"USDT")[0]
                 return (
-                <tr key={i}>
-                    <td>
-                        <Link to={
-                            `/user/edit-post/${item._id}`
-                        }>
-                            {item}
-                        </Link></td>
+                    <tr key={i}>
+                    <td>                        
+                        {item.symbol}   
+                    </td>                     
                     <td>
                         {                            
                             parseFloat(coin.lastPrice).toFixed(2)
+                        }
+                    </td>
+                    <td>
+                        {                            
+                            parseFloat(item.amount).toFixed(9)
+                        }
+                    </td>
+                    <td>
+                        {                            
+                            parseFloat(coin.lastPrice*item.amount).toFixed(2)
                         }
                     </td>
                     <td>
@@ -102,28 +114,15 @@ class WalletView extends Component {
         :null
     }
 
-
-    renderShowMore(){
-        if (this.state.showShowMore) {
-            return(
-                <div className="loadmore" onClick={this.loadmore}>
-                    Load More
-                </div>
-            )
-        } else {
-            return(null)
-        }        
-    }
-
     render() {
         const criptos = this.props.criptos.list        
-        //console.log(this.props)
+        const wallet = this.props.criptos.wallet
+        console.log(this.props)
         return (
             <div>
                 <div className="user_posts">
                     {this.renderTitle()}
-                    {this.renderSearch()}
-                    {this.renderTable(criptos   )}                
+                    {this.renderTable(criptos,wallet   )}                
                 </div>
                 
             </div>
@@ -132,12 +131,12 @@ class WalletView extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log("kkk")
-    console.log(state)
+    //console.log("aaa")
+    //console.log(state)
     return {
-        criptos: state.cripto,
-        wallet: state.wallet
+        criptos: state.cripto
     }
 }
 
 export default connect(mapStateToProps)(WalletView) ;
+//export default HomeContainer

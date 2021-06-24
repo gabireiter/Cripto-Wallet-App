@@ -50,7 +50,7 @@ app.get('/api/getWalletCoin',(req,res)=>{
         })
 })
 
-app.get('/api/getWalletCoins',(req,res)=>{
+app.get('/api/GetWalletCoins',(req,res)=>{
     let userId = req.query.user_id
     
     WalletCoin.find(
