@@ -38,8 +38,8 @@ class WalletCoinEdit extends Component {
     }
 
     onSubmit(values){
-        this.props.updateCoin(values,()=>{
-           //this.props.history.push('/')
+        this.props.updateCoin(values,()=>{            
+           this.props.history.push('/user/user-wallet')
         })
     }
 
@@ -75,7 +75,7 @@ class WalletCoinEdit extends Component {
                             component={this.renderInputField}                            
                         />                    
 
-                        <button type="submit">Submit</button>
+                        <button type="submit">Update</button>
 
                     </form>
                 </div>

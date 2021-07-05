@@ -101,13 +101,15 @@ export function saveCoinId(coinId){
     }
 }
 
-export function updateCoin(data){
+export function updateCoin(data,cb){
     const request = axios.post(`/api/WalletCoin_update`,data)
-                .then(response => response.data);
+                .then(
+                    ()=>cb()
+                );
 
     return {
         type:UPDATE_WALLET,
-        payload:request
+        payload:'ok'
     }
 
 }

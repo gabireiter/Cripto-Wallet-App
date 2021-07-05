@@ -188,7 +188,7 @@ class WalletView extends Component {
     render() {
         const criptos = this.props.criptos.list        
         const wallet = this.props.criptos.wallet
-        console.log(this.props)
+        //console.log(this.props)
         return (
             <div>
                 <div className="user_posts">
