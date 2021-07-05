@@ -50,6 +50,15 @@ app.get('/api/getWalletCoin',(req,res)=>{
         })
 })
 
+app.get('/api/getWalletCoinById',(req,res)=>{
+    let id = req.query.id
+    
+    WalletCoin.findById(id,(err,doc)=>{
+            if (err) return res.status(400).send(err)
+            res.send(doc)
+        })
+})
+
 app.get('/api/GetWalletCoins',(req,res)=>{
     let userId = req.query.user_id
     

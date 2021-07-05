@@ -1,4 +1,10 @@
-import {GET_CRIPTOS,GET_USER_WALLET} from '../actions/types'
+import {
+    GET_CRIPTOS,
+    GET_USER_WALLET,
+    SAVE_COIN_ID,
+    UPDATE_WALLET,
+    PASS_AMOUNT_PARAMETER
+} from '../actions/types'
 
 export default function foo(state={},action) {
     switch (action.type) {
@@ -6,6 +12,16 @@ export default function foo(state={},action) {
             return {...state,list: action.payload}
         case GET_USER_WALLET:
             return {...state,wallet:action.payload}        
+        case SAVE_COIN_ID:
+            return {...state,coin_data:action.payload}
+        case UPDATE_WALLET:
+            return {
+                    ...state,
+                    updatedCoin:action.payload.success,
+                    coin:action.payload.doc
+                }
+        case PASS_AMOUNT_PARAMETER:
+            return {...state,parameters:action.payload}
         case 'GET_BOOK_W_REVIEWER':
             return {
                 ...state,

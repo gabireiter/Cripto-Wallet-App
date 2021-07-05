@@ -107,7 +107,7 @@ class HomeContainer extends Component {
     renderShowMore(){
         if (this.state.showShowMore) {
             return(
-                <div className="loadmore" onClick={this.loadmore}>
+                <div className="loadmore"  onClick={this.loadmore}>
                     Load More
                 </div>
             )

@@ -1,5 +1,11 @@
 import axios from 'axios'
-import {GET_CRIPTOS,GET_USER_WALLET} from './types'
+import {
+    GET_CRIPTOS,
+    GET_USER_WALLET,
+    SAVE_COIN_ID,
+    UPDATE_WALLET,
+    PASS_AMOUNT_PARAMETER
+} from './types'
 //import { useStore } from 'react-redux'
 //import { response } from 'express'
 const BINANCE_API_URL = "https://api.binance.com"
@@ -82,6 +88,37 @@ export function getUserWallet(userId){
         type:GET_USER_WALLET,
         payload:request
     }
+}
+
+export function saveCoinId(coinId){
+    const request = axios.get(`/api/GetWalletCoinById?id=${coinId}`)
+                .then(response => response.data);
+
+
+    return {
+        type:SAVE_COIN_ID,
+        payload:request
+    }
+}
+
+export function updateCoin(data){
+    const request = axios.post(`/api/WalletCoin_update`,data)
+                .then(response => response.data);
+
+    return {
+        type:UPDATE_WALLET,
+        payload:request
+    }
+
+}
+
+export function saveParameterToPass(data){
+    
+    return {
+        type:PASS_AMOUNT_PARAMETER,
+        payload:data
+    }
+
 }
 
 // export function getBooks(
