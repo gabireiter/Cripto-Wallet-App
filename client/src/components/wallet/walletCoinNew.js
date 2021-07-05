@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import { updateCoin } from '../../actions'
 import { Field, reduxForm } from 'redux-form';
 
-class WalletCoinEdit extends Component {
+class WalletCoinNew extends Component {
 
     //PRISTINE / DIRTY // TOUCHED / ERROR
 
     renderInputField(field){
-        console.log(field)
+        //console.log(field)
         const className = `form-input ${field.meta.touched && field.meta.error ? 'has-error':''}`;
         return (
             <div className={className}>
@@ -21,6 +21,23 @@ class WalletCoinEdit extends Component {
             </div>
         )
     }
+
+    renderComboField(field){
+        //console.log(field)
+        const className = `form-input ${field.meta.touched && field.meta.error ? 'has-error':''}`;
+        return (
+            <div className={className}>
+                <label>{field.myLabel}</label>
+                {/*<input type="text" {...field.input}/>*/}
+                <select {...field.input}>                    
+                </select>
+                <div className="error">
+                    {field.meta.touched ? field.meta.error:''}
+                </div>
+            </div>
+        )
+    }
+
 
     renderTextareaField(field){
         const className = `form-input ${field.meta.touched && field.meta.error ? 'has-error':''}`;
@@ -38,68 +55,54 @@ class WalletCoinEdit extends Component {
     }
 
     onSubmit(values){
-        this.props.updateCoin(values,()=>{            
+        this.props.insertCoin(values,()=>{            
            this.props.history.push('/user/user-wallet')
         })
     }
 
 
     render(){
-        console.log(this.props)
-        //return(null)
-        
-        var coin        
-        
-        if (this.props.criptos) {
-            //const coin_id = this.props.criptos.coin_data._id
-            //coin = this.props.criptos.wallet.find(
-            //    element=>element._id===coin_id
-            //    )       
-            coin = this.props.criptos.coin_data
-            //console.log(this.props.criptos) 
-            //console.log(coin_id)             
-            return(
-                <div className="Form">
-                    <div className="top">
-                        <h3>Edit Coin</h3>
-                        <Link to="/">Back</Link>
-                    </div>
-                    <div>
-                        Coin: {coin.symbol}
-                    </div>
-                    <form onSubmit={this.props.handleSubmit((event)=>this.onSubmit(event))}>
-
-                        <Field
-                            myLabel="Enter new Amount"
-                            name="amount"
-                            component={this.renderInputField}                            
-                        />                    
-
-                        <button type="submit">Update</button>
-
-                    </form>
+        return(
+            <div className="Form">
+                <div className="top">
+                    <h3>New Coin</h3>
+                    <Link to="/">Back</Link>
                 </div>
-            )
-        } else {
-            return(null)
-        }
-        
+                <form onSubmit={this.props.handleSubmit((event)=>this.onSubmit(event))}>
+
+                    <Field
+                        myLabel="Enter symbol"
+                        name="symbol"
+                        component={this.renderInputField}                            
+                    />                    
+                    <Field
+                        myLabel="Enter amount"
+                        name="amount"
+                        component={this.renderInputField}                            
+                    />                    
+
+                    <button type="submit">Update</button>
+
+                </form>
+            </div>
+        )                
     }
 }
 
 function validate(values){
     const errors = {};
 
-    console.log(values)
     if(isNaN(values.amount)){
         errors.amount = "This field must be a number"
     } 
+
+    
     return errors;
 }
 
 function mapStateToProps(state){
-    //console.log(state)
-    //console.log(state.cripto.coin_data)
+    console.log(state)
+    console.log(state.cripto.coin_data)
     return {
         success: state.data,
         criptos: state.cripto,
@@ -117,15 +120,5 @@ export default connect(
             form:'UpdateCoin',
             enableReinitialize: true    
         })
-    ( WalletCoinEdit)
+    ( WalletCoinNew)
     )
-
-// export default reduxForm({
-//     validate,
-//     form:'UpdateCoin',
-//     enableReinitialize: true    
-// })(
-//     connect(
-//         mapStateToProps,        
-//         {updateCoin})( WalletCoinEdit)
-// )

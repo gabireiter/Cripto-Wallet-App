@@ -9,6 +9,7 @@ import User from './components/admin'
 import AddReview from './containers/admin/add'   
 import UserWallet from './components/wallet/walletView';
 import WalletCoinEdit from './components/wallet/walletCoinEdit';
+import WalletCoinNew from './components/wallet/walletCoinNew';
 import Register from './containers/admin/register'
 import Logout from './components/admin/logout'
 
@@ -25,6 +26,7 @@ const Routes = () => {
                     <Route path="/user/add" exact component={Auth(AddReview,true)}/>
                     <Route path="/user/register" exact component={Auth(Register,true)}/>
                     <Route path="/user/edit-wallet-coin" exact component={Auth(WalletCoinEdit,true)}/>
+                    <Route path="/user/new-wallet-coin" exact component={Auth(WalletCoinNew,true)}/>
                     <Route path="/books/:id" component={Auth(BookView)}/>                    
                     <Route path="/user/user-wallet" exact component={Auth(UserWallet,true)}/>
                 </Switch>

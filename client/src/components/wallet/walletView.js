@@ -76,6 +76,11 @@ class WalletView extends Component {
         this.props.history.push(`/user/edit-wallet-coin`)//?id:${coinid}`)
     }
 
+    newCoin = ()=>{
+        //console.log("nuevo")
+        this.props.history.push(`/user/new-wallet-coin`)//?id:${coinid}`)
+    }
+
     calculateTotal = (criptos,wallet)=>{
         var total=0;
         if (wallet && typeof criptos !== "undefined") { 
@@ -185,6 +190,15 @@ class WalletView extends Component {
         :null
     }
 
+    renderButtonNew() {
+        return(
+            <div>
+                <p></p>
+                <button className="blue" onClick={this.newCoin}>New Coin</button>
+            </div>
+        )
+    }
+
     render() {
         const criptos = this.props.criptos.list        
         const wallet = this.props.criptos.wallet
@@ -194,6 +208,7 @@ class WalletView extends Component {
                 <div className="user_posts">
                     {this.renderTitle()}
                     {this.renderTable(criptos,wallet   )}                
+                    {this.renderButtonNew()}
                 </div>
                 
             </div>
