@@ -4,8 +4,17 @@ import {connect} from 'react-redux'
 import {
     getCriptos,
     getUserWallet,
-    saveCoinId
+    saveCoinId,
+    deleteCoin
 } from '../../actions'
+
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+
 
 //import BookItem from '../widgetsUI/book_item'
 
@@ -13,8 +22,42 @@ class WalletView extends Component {
 
     state = {
         showShowMore: true,        
+        open: false,
+        openedCoinId: null
     }
+        
+    handleClickOpen = (event) => {
+        const coinid = event.target.parentNode.attributes.coinid.nodeValue
+
+        this.setState(
+            { 
+                open: true,
+                openedCoinId: coinid            
+            });
+    };
+
+    handleClose = () => {
+        this.setState({ open: false });
+    };
+
+    handleAgree = () => {        
+        this.handleClose();
+        //console.log("I agree! Do Something");
+        //console.log(this.state.openedCoinId)
+        this.props.dispatch(deleteCoin(this.state.openedCoinId))
+        this.props.dispatch(getUserWallet(this.props.user.login.id))
+        this.setState(
+            { 
+                openedCoinId: ''
+            });
+        //this.props.dispatch(getCriptos())
+    };
     
+    handleDisagree = () => {
+        //console.log("I do not agree.");
+        this.handleClose();
+    };
+
     componentDidMount(){
         this.props.dispatch(getCriptos())
         this.props.dispatch(getUserWallet(this.props.user.login.id))
@@ -176,7 +219,7 @@ class WalletView extends Component {
                         </div>
                     </td>
                     <td>
-                        <div to="" style={{color: 'red'}} coinid={item._id} onClick={this.deleteCoin}>
+                        <div to="" style={{color: 'red'}} coinid={item._id} onClick={this.handleClickOpen}>
                             <FontAwesome name='minus-circle' size = '2x'/>
                         </div>
                     </td>
@@ -199,6 +242,39 @@ class WalletView extends Component {
         )
     }
 
+    renderAlertDialogue() {
+        return (
+          <div>
+            {/* Button to trigger the opening of the dialog */}
+            {/* <Button onClick={this.handleClickOpen}>Open alert dialog</Button> */}
+            {/* Dialog that is displayed if the state open is true */}
+            <Dialog
+              open={this.state.open}
+              onClose={this.handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Coin delete confirmation"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Do you confirm to delete this coin from your wallet ?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleDisagree} color="primary">
+                  No
+                </Button>
+                <Button onClick={this.handleAgree} color="primary" autoFocus>
+                  Confirm
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        );
+      }
+
     render() {
         const criptos = this.props.criptos.list        
         const wallet = this.props.criptos.wallet
@@ -209,6 +285,7 @@ class WalletView extends Component {
                     {this.renderTitle()}
                     {this.renderTable(criptos,wallet   )}                
                     {this.renderButtonNew()}
+                    {this.renderAlertDialogue()}
                 </div>
                 
             </div>

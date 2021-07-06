@@ -114,9 +114,13 @@ class WalletCoinNew extends Component {
     }
 }
 
-function validate(values){
+function validate(values, props){
     const errors = {};
 
+    //console.log("aaa")
+    if (props.criptos.wallet.find(element=>element.symbol===values.symbols)) {
+        errors.symbols = "You already have this coin in your wallet"
+    }
     if(isNaN(values.amount)){
         errors.amount = "This field must be a number"
     } 

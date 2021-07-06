@@ -3,8 +3,9 @@ import {
     GET_CRIPTOS,
     GET_USER_WALLET,
     SAVE_COIN_ID,
-    UPDATE_WALLET,
-    INSERT_WALLET,
+    UPDATE_WALLET_COIN,
+    INSERT_WALLET_COIN,
+    DELETE_WALLET_COIN,
     PASS_AMOUNT_PARAMETER
 } from './types'
 //import { useStore } from 'react-redux'
@@ -109,7 +110,7 @@ export function updateCoin(data,cb){
                 );
 
     return {
-        type:UPDATE_WALLET,
+        type:UPDATE_WALLET_COIN,
         payload:'ok'
     }
 
@@ -123,10 +124,19 @@ export function insertCoin(data,cb){
                 );
 
     return {
-        type:INSERT_WALLET,
+        type:INSERT_WALLET_COIN,
         payload:'ok'
     }
+}
 
+export function deleteCoin(id){
+    const request = axios.delete(`/api/WalletCoin_delete?id=${id}`)
+                    .then(response => response.data)
+
+    return {
+        type:DELETE_WALLET_COIN,
+        payload:request
+    }
 }
 
 

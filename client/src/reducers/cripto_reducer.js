@@ -2,8 +2,9 @@ import {
     GET_CRIPTOS,
     GET_USER_WALLET,
     SAVE_COIN_ID,
-    UPDATE_WALLET,
-    INSERT_WALLET,
+    UPDATE_WALLET_COIN,
+    INSERT_WALLET_COIN,
+    DELETE_WALLET_COIN,
     PASS_AMOUNT_PARAMETER
 } from '../actions/types'
 
@@ -15,18 +16,23 @@ export default function foo(state={},action) {
             return {...state,wallet:action.payload}        
         case SAVE_COIN_ID:
             return {...state,coin_data:action.payload}
-        case UPDATE_WALLET:
+        case UPDATE_WALLET_COIN:
             return {
                     ...state,
                     updatedCoin:action.payload.success,
                     coin:action.payload.doc
                 }
-        case INSERT_WALLET:
+        case INSERT_WALLET_COIN:
             return {
                     ...state,
                     insertedCoin:action.payload.success,
                     coin:action.payload.doc
-                }                
+                }
+        case DELETE_WALLET_COIN:
+            return {
+                    ...state,
+                    coinDeleted:action.payload
+            }               
         case PASS_AMOUNT_PARAMETER:
             return {...state,parameters:action.payload}
         case 'GET_BOOK_W_REVIEWER':
