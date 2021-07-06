@@ -75,7 +75,7 @@ class WalletCoinEdit extends Component {
                             component={this.renderInputField}                            
                         />                    
 
-                        <button type="submit">Update</button>
+                        <button type="submit" className="blue" >Update</button>
 
                     </form>
                 </div>

@@ -218,7 +218,7 @@ class WalletView extends Component {
 
 function mapStateToProps(state) {
     //console.log("aaa")
-    console.log(state)
+    //console.log(state)
     return {
         criptos: state.cripto
     }

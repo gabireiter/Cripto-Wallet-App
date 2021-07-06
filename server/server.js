@@ -86,7 +86,8 @@ app.get('/api/GetWalletCoins',(req,res)=>{
 
 // POST //
 
-app.post('/api/WalletCoin_Insert',(req, res)=>{
+app.post('/api/WalletCoin_insert',(req, res)=>{
+    console.log(req)
     const walletCoin = new WalletCoin({
         symbol: req.body.symbol,
         amount: req.body.amount,    
@@ -97,6 +98,29 @@ app.post('/api/WalletCoin_Insert',(req, res)=>{
         res.status(200).json({
             post: true,
             walletCoinId: doc._id
+        })
+    })    
+})
+
+
+// UPDATE //
+
+app.post('/api/WalletCoin_update',(req, res)=>{
+    const walletCoin = new WalletCoin({
+        _id: req.body._id,
+        symbol: req.body.symbol,
+        amount: req.body.amount,    
+        userId: req.body.userId
+    })
+    console.log(walletCoin)
+    
+    WalletCoin.findByIdAndUpdate(walletCoin._id,walletCoin,{new: true},(err,doc)=>{
+        console.log(doc)
+        console.log(err)
+        if (err) return res.status(400).send(err)
+        res.json({
+            success: true,
+            doc
         })
     })    
 })
@@ -121,28 +145,6 @@ app.post('/api/book',(req, res)=>{
     })    
 })
 */
-
-// UPDATE //
-
-app.post('/api/WalletCoin_update',(req, res)=>{
-    const walletCoin = new WalletCoin({
-        _id: req.body._id,
-        symbol: req.body.symbol,
-        amount: req.body.amount,    
-        userId: req.body.userId
-    })
-    console.log(walletCoin)
-    
-    WalletCoin.findByIdAndUpdate(walletCoin._id,walletCoin,{new: true},(err,doc)=>{
-        console.log(doc)
-        console.log(err)
-        if (err) return res.status(400).send(err)
-        res.json({
-            success: true,
-            doc
-        })
-    })    
-})
 
 
 // DELETE //

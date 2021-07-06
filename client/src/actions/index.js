@@ -4,6 +4,7 @@ import {
     GET_USER_WALLET,
     SAVE_COIN_ID,
     UPDATE_WALLET,
+    INSERT_WALLET,
     PASS_AMOUNT_PARAMETER
 } from './types'
 //import { useStore } from 'react-redux'
@@ -113,6 +114,21 @@ export function updateCoin(data,cb){
     }
 
 }
+
+export function insertCoin(data,cb){
+    console.log(data)
+    const request = axios.post(`/api/WalletCoin_insert`,data)
+                .then(
+                    ()=>cb()
+                );
+
+    return {
+        type:INSERT_WALLET,
+        payload:'ok'
+    }
+
+}
+
 
 export function saveParameterToPass(data){
     

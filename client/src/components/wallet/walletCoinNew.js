@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { updateCoin } from '../../actions'
+import { insertCoin } from '../../actions'
 import { Field, reduxForm } from 'redux-form';
 
 class WalletCoinNew extends Component {
 
     //PRISTINE / DIRTY // TOUCHED / ERROR
+    componentDidMount(){
+
+    }
+
 
     renderInputField(field){
         //console.log(field)
@@ -22,15 +26,30 @@ class WalletCoinNew extends Component {
         )
     }
 
-    renderComboField(field){
+    renderSelectOptions(field){
+        //<option value="volvo">Volvo</option>
+        //console
+        const symbols = this.props.criptos.list.symbols
+        return(
+            <select {...field.input}>                
+                {
+                    symbols.map(item => {
+                        return(<option value={item}>{item}</option>)
+                    })
+                }                
+                {/*<option value="Prueba2">Prueba 2</option>            */}
+            </select>
+        )
+    }
+
+    renderComboField=(field)=>{
         //console.log(field)
         const className = `form-input ${field.meta.touched && field.meta.error ? 'has-error':''}`;
         return (
             <div className={className}>
                 <label>{field.myLabel}</label>
                 {/*<input type="text" {...field.input}/>*/}
-                <select {...field.input}>                    
-                </select>
+                    {this.renderSelectOptions(field)}                                 
                 <div className="error">
                     {field.meta.touched ? field.meta.error:''}
                 </div>
@@ -55,7 +74,13 @@ class WalletCoinNew extends Component {
     }
 
     onSubmit(values){
-        this.props.insertCoin(values,()=>{            
+        const userId = this.props.user.login.id
+        const newvalues = {
+            symbol:values.symbols,
+            amount:values.amount,
+            userId:userId}
+        console.log(newvalues)
+        this.props.insertCoin(newvalues,()=>{            
            this.props.history.push('/user/user-wallet')
         })
     }
@@ -72,8 +97,8 @@ class WalletCoinNew extends Component {
 
                     <Field
                         myLabel="Enter symbol"
-                        name="symbol"
-                        component={this.renderInputField}                            
+                        name="symbols"
+                        component={this.renderComboField}                            
                     />                    
                     <Field
                         myLabel="Enter amount"
@@ -81,7 +106,7 @@ class WalletCoinNew extends Component {
                         component={this.renderInputField}                            
                     />                    
 
-                    <button type="submit">Update</button>
+                    <button type="submit" className="blue" >Add Coin to Wallet</button>
 
                 </form>
             </div>
@@ -102,22 +127,21 @@ function validate(values){
 
 function mapStateToProps(state){
     console.log(state)
-    console.log(state.cripto.coin_data)
+    //console.log(state.cripto.coin_data)
     return {
         success: state.data,
-        criptos: state.cripto,
-        initialValues: state.cripto.coin_data
+        criptos: state.cripto        
     }
 }
 
 
 export default connect(
     mapStateToProps,        
-    {updateCoin})
+    {insertCoin})
     (
         reduxForm({
             validate,
-            form:'UpdateCoin',
+            form:'InsertCoin',
             enableReinitialize: true    
         })
     ( WalletCoinNew)
