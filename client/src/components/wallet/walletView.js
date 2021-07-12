@@ -126,13 +126,18 @@ class WalletView extends Component {
 
     calculateTotal = (criptos,wallet)=>{
         var total=0;
+        console.log(wallet)
         if (wallet && typeof criptos !== "undefined") { 
             // Loop among all the coins of the wallet
             wallet.forEach(item => {
                 //I look for the price of the coin
                 const coin = criptos.prices.filter(price=>price.symbol===item.symbol+"USDT")[0]
-                total+=coin.lastPrice*item.amount
-                
+                if (typeof coin !=='undefined') {
+                    console.log(coin)
+                    console.log(item.symbol+"USDT")
+                    console.log(criptos.prices)
+                    total+=coin.lastPrice*item.amount
+                }
             })
         } 
         return (total);
@@ -177,6 +182,54 @@ class WalletView extends Component {
         )
     }
 
+    renderRow = (item, i, coin, walletTotal)=>{
+        return(
+            <tr key={i}>
+                <td>                        
+                    {item.symbol}   
+                </td>                     
+                <td>
+                    {                            
+                        parseFloat(item.amount)//.toFixed(9)
+                    }                        
+                </td>
+                <td>
+                    {                            
+                        parseFloat(coin.lastPrice).toFixed(2)
+                    }
+                </td>
+                <td>
+                    {                            
+                        parseFloat(coin.lastPrice*item.amount).toFixed(2)
+                    }
+                </td>
+                <td>
+                    {                            
+                        parseFloat(coin.lastPrice*item.amount/walletTotal*100).toFixed(2)+"%"
+                    }
+                </td>
+                <td>
+                    <div style={{color: coin.priceChangePercent>=0 ? "#149414":"#ff0000"}} >
+                    {
+                        coin.priceChangePercent
+                    //moment(item.createdAt).format("DD/MM/YYYY")
+                    }
+                    </div>
+                </td>
+                <td>
+                    <div to="" style={{color: 'red'}} coinid={item._id} onClick={this.handleClickOpen}>
+                        <FontAwesome name='minus-circle' size = '2x'/>
+                    </div>
+                </td>
+                <td>
+                    <div to="" style={{color: 'green'}} coinid={item._id} onClick={this.editCoin}>
+                        <FontAwesome name='edit' size = '2x'/>
+                    </div>
+                </td>
+            </tr>
+        )
+    }
+
     renderCriptos = (criptos,wallet,walletTotal)=>{
         //console.log(criptos)
         //console.log(wallet)
@@ -185,52 +238,18 @@ class WalletView extends Component {
             wallet.map((item,i) => {
                 //I look for the price of the coin
                 const coin = criptos.prices.filter(price=>price.symbol===item.symbol+"USDT")[0]
-                return (
-                    <tr key={i}>
-                    <td>                        
-                        {item.symbol}   
-                    </td>                     
-                    <td>
-                        {                            
-                            parseFloat(item.amount)//.toFixed(9)
-                        }                        
-                    </td>
-                    <td>
-                        {                            
-                            parseFloat(coin.lastPrice).toFixed(2)
-                        }
-                    </td>
-                    <td>
-                        {                            
-                            parseFloat(coin.lastPrice*item.amount).toFixed(2)
-                        }
-                    </td>
-                    <td>
-                        {                            
-                            parseFloat(coin.lastPrice*item.amount/walletTotal*100).toFixed(2)+"%"
-                        }
-                    </td>
-                    <td>
-                        <div style={{color: coin.priceChangePercent>=0 ? "#149414":"#ff0000"}} >
-                        {
-                            coin.priceChangePercent
-                        //moment(item.createdAt).format("DD/MM/YYYY")
-                        }
-                        </div>
-                    </td>
-                    <td>
-                        <div to="" style={{color: 'red'}} coinid={item._id} onClick={this.handleClickOpen}>
-                            <FontAwesome name='minus-circle' size = '2x'/>
-                        </div>
-                    </td>
-                    <td>
-                        <div to="" style={{color: 'green'}} coinid={item._id} onClick={this.editCoin}>
-                            <FontAwesome name='edit' size = '2x'/>
-                        </div>
-                    </td>
-                </tr>
-            )})
-        :null
+                if (typeof coin!=='undefined') {
+                    return (
+                        <React.Fragment>
+                            {this.renderRow(item,i,coin,walletTotal)}                        
+                        </React.Fragment>
+                    )}
+                    else {
+                            return(null)
+                        }    
+                    }
+            )
+        :null    
     }
 
     renderButtonNew() {

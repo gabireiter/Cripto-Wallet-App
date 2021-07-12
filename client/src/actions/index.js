@@ -6,7 +6,9 @@ import {
     UPDATE_WALLET_COIN,
     INSERT_WALLET_COIN,
     DELETE_WALLET_COIN,
-    PASS_AMOUNT_PARAMETER
+    PASS_AMOUNT_PARAMETER,
+    USER_REGISTER,
+    SAVE_LOGIN_MESSAGE
 } from './types'
 //import { useStore } from 'react-redux'
 //import { response } from 'express'
@@ -301,4 +303,33 @@ export function userRegister(user,userList){
             })
         })
     }
+}
+
+export function insertUser(userData,cb){
+    console.log(userData)
+    
+    console.log('ggg')    
+    const request = axios.post(`/api/register`,userData)
+                .then(
+                    ({data})=>cb(data)
+                );
+
+    return {
+        type:USER_REGISTER,
+        payload:'ok'
+    }
+}
+
+export function saveLoginMessage(message){    
+    return {
+        type:SAVE_LOGIN_MESSAGE,
+        payload:message
+    }    
+}
+
+export function clearLoginMessage(){    
+    return {
+        type:SAVE_LOGIN_MESSAGE,
+        payload:''
+    }    
 }

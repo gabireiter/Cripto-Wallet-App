@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {loginUser} from '../../actions'
+import {loginUser, clearLoginMessage} from '../../actions'
 
 class Login extends Component {
 
@@ -9,6 +9,12 @@ class Login extends Component {
         password:'',
         error:'',
         success:false
+    }
+
+    componentDidMount(){
+        setTimeout(() => {            
+            this.props.dispatch(clearLoginMessage())            
+        }, 5000);
     }
 
     handleInputEmail = (event) => {
@@ -31,10 +37,15 @@ class Login extends Component {
 
     render() {
         let user = this.props.user;
+        console.log('ccc')
+        console.log(this.props)
+        const message = this.props.message
         return (
             <div className="rl_container">
                 <form onSubmit={this.submitForm}>
                     <h2>Log in here</h2>
+
+                    <div style={{color: 'green'}}>{message}</div>
 
                     <div className="form_element">
                         <input 
@@ -71,8 +82,11 @@ class Login extends Component {
 }
 
 function mapStateToProps(state){
+    console.log('bbb')
+    console.log(state)
     return {
-        user:state.user
+        user:state.user,
+        message: state.cripto.message
     }
 }
 

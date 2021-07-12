@@ -5,7 +5,9 @@ import {
     UPDATE_WALLET_COIN,
     INSERT_WALLET_COIN,
     DELETE_WALLET_COIN,
-    PASS_AMOUNT_PARAMETER
+    PASS_AMOUNT_PARAMETER,
+    USER_REGISTER,
+    SAVE_LOGIN_MESSAGE
 } from '../actions/types'
 
 export default function foo(state={},action) {
@@ -35,6 +37,10 @@ export default function foo(state={},action) {
             }               
         case PASS_AMOUNT_PARAMETER:
             return {...state,parameters:action.payload}
+        case USER_REGISTER:
+            return {...state,user_registered:action.payload}
+        case SAVE_LOGIN_MESSAGE:
+            return {...state,message:action.payload}
         case 'GET_BOOK_W_REVIEWER':
             return {
                 ...state,

@@ -62,7 +62,7 @@ class WalletCoinEdit extends Component {
                 <div className="Form">
                     <div className="top">
                         <h3>Edit Coin</h3>
-                        <Link to="/">Back</Link>
+                        <Link to="/user/user-wallet">Back</Link>
                     </div>
                     <div>
                         Coin: {coin.symbol}

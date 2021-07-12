@@ -32,9 +32,10 @@ class WalletCoinNew extends Component {
         const symbols = this.props.criptos.list.symbols
         return(
             <select {...field.input}>                
+                <option key="000" value="">(Select symbol)</option>
                 {
                     symbols.map(item => {
-                        return(<option value={item}>{item}</option>)
+                        return(<option  key={item} value={item}>{item}</option>)
                     })
                 }                
                 {/*<option value="Prueba2">Prueba 2</option>            */}
@@ -74,12 +75,13 @@ class WalletCoinNew extends Component {
     }
 
     onSubmit(values){
+        //console.log(values)
         const userId = this.props.user.login.id
         const newvalues = {
             symbol:values.symbols,
             amount:values.amount,
             userId:userId}
-        console.log(newvalues)
+        //console.log(newvalues)
         this.props.insertCoin(newvalues,()=>{            
            this.props.history.push('/user/user-wallet')
         })
@@ -91,10 +93,9 @@ class WalletCoinNew extends Component {
             <div className="Form">
                 <div className="top">
                     <h3>New Coin</h3>
-                    <Link to="/">Back</Link>
+                    <Link to="/user/user-wallet">Back</Link>
                 </div>
                 <form onSubmit={this.props.handleSubmit((event)=>this.onSubmit(event))}>
-
                     <Field
                         myLabel="Enter symbol"
                         name="symbols"
@@ -117,9 +118,13 @@ class WalletCoinNew extends Component {
 function validate(values, props){
     const errors = {};
 
-    //console.log("aaa")
-    if (props.criptos.wallet.find(element=>element.symbol===values.symbols)) {
-        errors.symbols = "You already have this coin in your wallet"
+    console.log(values)
+    if (!values.symbols) {
+        errors.symbols = "You must select a symbol"
+    } else {
+        if (props.criptos.wallet.find(element=>element.symbol===values.symbols)) {
+            errors.symbols = "You already have this coin in your wallet"
+        }
     }
     if(isNaN(values.amount)){
         errors.amount = "This field must be a number"
@@ -130,7 +135,7 @@ function validate(values, props){
 }
 
 function mapStateToProps(state){
-    console.log(state)
+    //console.log(state)
     //console.log(state.cripto.coin_data)
     return {
         success: state.data,

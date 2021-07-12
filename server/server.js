@@ -87,7 +87,7 @@ app.get('/api/GetWalletCoins',(req,res)=>{
 // POST //
 
 app.post('/api/WalletCoin_insert',(req, res)=>{
-    console.log(req)
+    console.log(req.body)
     const walletCoin = new WalletCoin({
         symbol: req.body.symbol,
         amount: req.body.amount,    
@@ -205,8 +205,31 @@ app.post('/api/register',(req, res)=>{
         role: req.body.role,
         token: req.body.token
     })
+    //console.log('hhh')
+    //console.log(user)
+
     user.save((err,doc)=>{
-        if (err) return res.json({success:false})
+        // console.log('gggg')
+        // console.log(err)        
+        // console.log('hhhh')
+        // console.log(doc)
+        // console.log('iiii')
+        //console.log(err.name)
+        
+        if (err) {
+            if (err.name === 'ValidationError') {
+                return res.json({
+                    success:false,
+                    message:Object.values(err.errors).map(val => val.message)[0]
+                })
+                //Object.values(err.errors).map(val => val.message)[0]
+            } else {
+                return res.json({
+                    success:false,
+                    message:err
+                })
+            }
+        }
         res.status(200).json({
             success: true,
             user: doc
@@ -238,6 +261,21 @@ app.post('/api/login',(req, res)=>{
                 })
             })
         })        
+    })    
+})
+
+app.post('/api/check_user_availability',(req, res)=>{
+    
+    const email = req.query.email
+    
+    //console.log(req)
+    User.findOne({'email': email},(err,user)=>{
+        //console.log(user)
+        if (user) {
+            return res.status(400).json({eMailExists:true,message:'Email already exists'})
+        } else {
+            return res.json({eMailExists:false})
+        }        
     })    
 })
 

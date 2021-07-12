@@ -23,9 +23,10 @@ const SidenavItems = ({user}) => {
         {
             type:'navItem',
             icon:'file-text-o',
-            text:'Add Admins',
-            link:'/user/register',
-            restricted:true
+            text:'Register',
+            link:'/register',
+            restricted:false,
+            exclude:true
         },
         {
             type:'navItem',
@@ -42,6 +43,7 @@ const SidenavItems = ({user}) => {
             link:'/user/user-wallet',
             restricted:true
         },
+        /*
         {
             type:'navItem',
             icon:'file-text-o',
@@ -49,6 +51,7 @@ const SidenavItems = ({user}) => {
             link:'/user/add',
             restricted:true
         },
+        */
         {
             type:'navItem',
             icon:'file-text-o',

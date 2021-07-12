@@ -1,36 +1,16 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { getUsers, userRegister } from '../../actions';
+import { getUsers, insertUser, saveLoginMessage } from '../../actions';
+import { Field, reduxForm } from 'redux-form';
+
 
 class Register extends PureComponent {
 
     state ={
-        name:'',
-        lastname:'',
-        email:'',
-        password:'',
-        error:''
+        message:''
     }
-
-    UNSAFE_componentWillMount(){
-        this.props.dispatch(getUsers())
-    }
-
-
-    handleInputEmail = (event) => {
-        this.setState({email:event.target.value})
-    } 
-    handleInputPassword= (event) => {
-        this.setState({password:event.target.value})
-    } 
-    handleInputName = (event) => {
-        this.setState({name:event.target.value})
-    } 
-    handleInputLastname = (event) => {
-        this.setState({lastname:event.target.value})
-    } 
-
-    UNSAFE_componentWillReceiveProps(nextProps){
+    
+    /*UNSAFE_componentWillReceiveProps(nextProps){
         if(nextProps.user.register === false){
             this.setState({error:'Error,try again'})
         } else{
@@ -42,7 +22,38 @@ class Register extends PureComponent {
             })
         }
     }
+    */
 
+    renderInputField(field){
+        //console.log(field)
+        const className = `form_element ${field.meta.touched && field.meta.error ? 'has-error':''}`;
+        return (
+            <div className={className}>
+                <label>{field.myLabel}</label>
+                <input type="text" {...field.input}/>
+                <div className="error">
+                    {field.meta.touched ? field.meta.error:''}
+                </div>
+            </div>
+        )
+    }
+
+    renderPasswordField(field){
+        //console.log(field)
+        const className = `form_element ${field.meta.touched && field.meta.error ? 'has-error':''}`;
+        return (
+            <div className={className}>
+                <label>{field.myLabel}</label>
+                <input type="password" {...field.input}/>
+                <div className="error">
+                    {field.meta.touched ? field.meta.error:''}
+                </div>
+            </div>
+        )
+    }
+
+
+    /*
     submitForm = (e) => {
         e.preventDefault();
         this.setState({error:''});
@@ -54,25 +65,72 @@ class Register extends PureComponent {
             lastname:this.state.lastname
         },this.props.user.users))
         
-    }
+    }    
+    */
 
-    showUsers = (user) =>(
-        user.users ? 
-            user.users.map(item => (
-                <tr key={item._id}>
-                    <td>{item.name}</td>
-                    <td>{item.lastname}</td>
-                    <td>{item.email}</td>
-                </tr>
-            ))
-        :null
-    )
+    onSubmit(values){
+        //const userId = this.props.user.login.id
+        const newvalues = {
+            email: values.email,
+            password: values.password1,
+            name: values.name,
+            lastname: values.lastname
+        }
+        //console.log(newvalues)
+        this.props.insertUser(newvalues,(data)=>{
+            if (data.success) {
+                this.props.dispatch(saveLoginMessage(`Welcome ${newvalues.name} !!! You have been registered correctly. Please Login`))
+                this.props.history.push('/login')
+            } else {
+                this.setState({message:data.message})
+            }
+            //console.log(data)
+            //this.props.dispatch(saveLoginMessage('You have been registered correctly. Please Login'))
+            //this.props.history.push('/login')
+        })
+    }
 
 
     render() {
         let user = this.props.user;
         return (
             <div className="rl_container">
+                <div style={{color: 'red'}}>
+                    {this.state.message}
+                </div>
+                <form onSubmit={this.props.handleSubmit((event)=>this.onSubmit(event))}>
+                    <Field
+                        myLabel="Enter name"
+                        name="name"
+                        component={this.renderInputField}                            
+                    />                    
+                    <Field
+                        myLabel="Enter lastname"
+                        name="lastname"
+                        component={this.renderInputField}                            
+                    />
+                    <Field
+                        myLabel="Enter Email"
+                        name="email"
+                        component={this.renderInputField}                                                
+                    />
+                    <Field
+                        myLabel="Enter Password"
+                        name="password1"
+                        component={this.renderPasswordField}                                                
+                    />
+                    <Field
+                        myLabel="Repeat Password"
+                        name="password2"
+                        component={this.renderPasswordField}                                                
+                    />
+                    <div className="error">
+                        {this.state.error}
+                    </div>
+                    <button type="submit" className="blue" >Register</button>
+
+                </form>
+                {/*
                 <form onSubmit={this.submitForm}>
                     <h2>Add user</h2>
                     
@@ -118,29 +176,73 @@ class Register extends PureComponent {
                     </div>
 
                 </form>
-                <div className="current_users">
-                    <h4>Current users:</h4>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Lastname</th>
-                                <th>Email</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.showUsers(user)}
-                        </tbody>
-                    </table>
-                </div>
+                */}                
             </div>
         );
     }
 }
+
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+function validate(values, props){
+    const errors = {};
+
+    //console.log("aaa")
+    
+    if (values.name==="") {
+        errors.name = "You must enter your name"
+    }
+    if (values.lastname==="") {
+        errors.lastname = "You must enter your lastname"
+    }
+    if(!validateEmail(values.email)){
+        errors.email = "You must enter your email"
+    } 
+    //console.log(values.password1)
+    //console.log(values.password2)
+    if(values.password1!==values.password2 && 
+        values.password1!=="undefined" && 
+        values.password2!=="undefined"
+        ){
+        errors.password2 = "Passwords are different"
+    }
+   
+    return errors;
+}
+
+// export const asyncValidate = (values, dispatch) => {
+
+//     return new Promise((resolve, reject) => {
+//       dispatch({
+//         type: CHECK_EMAIL_AVAILABILITY,
+//         promise: client => axios.post('/api/check_user_availability?', values),
+//       }).then((result) => {
+//           console.log(result)
+//         if (result.data.code !== 200) reject({username: 'That username is taken'});
+//         else resolve();
+//       });
+//     });
+//   };
+
 function mapStateToProps(state){
     return{
         user:state.user
     }
 }
 
-export default connect(mapStateToProps)(Register)
+//export default connect(mapStateToProps)(Register)
+export default connect(
+    mapStateToProps,        
+    {insertUser})
+    (
+        reduxForm({
+            validate,
+            //asyncValidate,
+            form:'Register',
+            enableReinitialize: true    
+        })
+    ( Register)
+    )
