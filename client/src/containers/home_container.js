@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import {getCriptos} from '../actions/index'
 import { Link } from 'react-router-dom';
-import moment from 'moment-js';
-
-//import BookItem from '../widgetsUI/book_item'
 
 class HomeContainer extends Component {
 
@@ -73,7 +70,6 @@ class HomeContainer extends Component {
     }
 
     renderCriptos = (criptos)=>{
-        console.log(criptos)
         return criptos ? 
             criptos.symbols.map((item,i) => {
                 const coin = criptos.prices.filter(price=>price.symbol===item+"USDT")[0]
@@ -94,7 +90,6 @@ class HomeContainer extends Component {
                         <div style={{color: coin.priceChangePercent>=0 ? "#149414":"#ff0000"}} >
                         {
                             coin.priceChangePercent
-                        //moment(item.createdAt).format("DD/MM/YYYY")
                         }
                         </div>
                     </td>
@@ -118,7 +113,6 @@ class HomeContainer extends Component {
 
     render() {
         const criptos = this.props.criptos.list        
-        //console.log(this.props)
         return (
             <div>
                 <div className="user_posts">
@@ -134,12 +128,9 @@ class HomeContainer extends Component {
 }
 
 function mapStateToProps(state) {
-    //console.log("aaa")
-    //console.log(state)
     return {
         criptos: state.cripto
     }
 }
 
 export default connect(mapStateToProps)(HomeContainer) ;
-//export default HomeContainer

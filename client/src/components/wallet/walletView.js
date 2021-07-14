@@ -15,9 +15,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-
-//import BookItem from '../widgetsUI/book_item'
-
 class WalletView extends Component {
 
     state = {
@@ -42,19 +39,15 @@ class WalletView extends Component {
 
     handleAgree = () => {        
         this.handleClose();
-        //console.log("I agree! Do Something");
-        //console.log(this.state.openedCoinId)
         this.props.dispatch(deleteCoin(this.state.openedCoinId))
         this.props.dispatch(getUserWallet(this.props.user.login.id))
         this.setState(
             { 
                 openedCoinId: ''
-            });
-        //this.props.dispatch(getCriptos())
+            });        
     };
     
     handleDisagree = () => {
-        //console.log("I do not agree.");
         this.handleClose();
     };
 
@@ -114,28 +107,22 @@ class WalletView extends Component {
     editCoin = (event) =>{
         const coinid = event.target.parentNode.attributes.coinid.nodeValue
 
-        console.log(coinid)
         this.props.dispatch(saveCoinId(coinid))
-        this.props.history.push(`/user/edit-wallet-coin`)//?id:${coinid}`)
+        this.props.history.push(`/user/edit-wallet-coin`)
     }
 
     newCoin = ()=>{
-        //console.log("nuevo")
-        this.props.history.push(`/user/new-wallet-coin`)//?id:${coinid}`)
+        this.props.history.push(`/user/new-wallet-coin`)
     }
 
     calculateTotal = (criptos,wallet)=>{
         var total=0;
-        console.log(wallet)
         if (wallet && typeof criptos !== "undefined") { 
             // Loop among all the coins of the wallet
             wallet.forEach(item => {
-                //I look for the price of the coin
+                //Look for the price of the coin
                 const coin = criptos.prices.filter(price=>price.symbol===item.symbol+"USDT")[0]
                 if (typeof coin !=='undefined') {
-                    console.log(coin)
-                    console.log(item.symbol+"USDT")
-                    console.log(criptos.prices)
                     total+=coin.lastPrice*item.amount
                 }
             })
@@ -212,7 +199,6 @@ class WalletView extends Component {
                     <div style={{color: coin.priceChangePercent>=0 ? "#149414":"#ff0000"}} >
                     {
                         coin.priceChangePercent
-                    //moment(item.createdAt).format("DD/MM/YYYY")
                     }
                     </div>
                 </td>
@@ -231,12 +217,10 @@ class WalletView extends Component {
     }
 
     renderCriptos = (criptos,wallet,walletTotal)=>{
-        //console.log(criptos)
-        //console.log(wallet)
         return wallet && typeof criptos !== "undefined"? 
             // Loop among all the coins of the wallet
             wallet.map((item,i) => {
-                //I look for the price of the coin
+                //Look for the price of the coin
                 const coin = criptos.prices.filter(price=>price.symbol===item.symbol+"USDT")[0]
                 if (typeof coin!=='undefined') {
                     return (
@@ -297,7 +281,6 @@ class WalletView extends Component {
     render() {
         const criptos = this.props.criptos.list        
         const wallet = this.props.criptos.wallet
-        //console.log(this.props)
         return (
             <div>
                 <div className="user_posts">
@@ -313,12 +296,9 @@ class WalletView extends Component {
 }
 
 function mapStateToProps(state) {
-    //console.log("aaa")
-    //console.log(state)
     return {
         criptos: state.cripto
     }
 }
 
 export default connect(mapStateToProps)(WalletView) ;
-//export default HomeContainer

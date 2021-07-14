@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { getUsers, insertUser, saveLoginMessage } from '../../actions';
+import { insertUser, saveLoginMessage } from '../../actions';
 import { Field, reduxForm } from 'redux-form';
 
 
@@ -9,23 +9,8 @@ class Register extends PureComponent {
     state ={
         message:''
     }
-    
-    /*UNSAFE_componentWillReceiveProps(nextProps){
-        if(nextProps.user.register === false){
-            this.setState({error:'Error,try again'})
-        } else{
-            this.setState({
-                name:'',
-                lastname:'',
-                email:'',
-                password:''
-            })
-        }
-    }
-    */
-
+        
     renderInputField(field){
-        //console.log(field)
         const className = `form_element ${field.meta.touched && field.meta.error ? 'has-error':''}`;
         return (
             <div className={className}>
@@ -39,7 +24,6 @@ class Register extends PureComponent {
     }
 
     renderPasswordField(field){
-        //console.log(field)
         const className = `form_element ${field.meta.touched && field.meta.error ? 'has-error':''}`;
         return (
             <div className={className}>
@@ -52,41 +36,20 @@ class Register extends PureComponent {
         )
     }
 
-
-    /*
-    submitForm = (e) => {
-        e.preventDefault();
-        this.setState({error:''});
-
-        this.props.dispatch(userRegister({
-            email:this.state.email,
-            password:this.state.password,
-            name:this.state.name,
-            lastname:this.state.lastname
-        },this.props.user.users))
-        
-    }    
-    */
-
     onSubmit(values){
-        //const userId = this.props.user.login.id
         const newvalues = {
             email: values.email,
             password: values.password1,
             name: values.name,
             lastname: values.lastname
         }
-        //console.log(newvalues)
         this.props.insertUser(newvalues,(data)=>{
             if (data.success) {
                 this.props.dispatch(saveLoginMessage(`Welcome ${newvalues.name} !!! You have been registered correctly. Please Login`))
                 this.props.history.push('/login')
             } else {
                 this.setState({message:data.message})
-            }
-            //console.log(data)
-            //this.props.dispatch(saveLoginMessage('You have been registered correctly. Please Login'))
-            //this.props.history.push('/login')
+            }            
         })
     }
 
@@ -128,55 +91,7 @@ class Register extends PureComponent {
                         {this.state.error}
                     </div>
                     <button type="submit" className="blue" >Register</button>
-
-                </form>
-                {/*
-                <form onSubmit={this.submitForm}>
-                    <h2>Add user</h2>
-                    
-                    <div className="form_element">
-                        <input
-                            type="text"
-                            placeholder="Enter name"
-                            value={this.state.name}
-                            onChange={this.handleInputName}
-                         />
-                    </div>
-
-                    <div className="form_element">
-                        <input
-                            type="text"
-                            placeholder="Enter Lastname"
-                            value={this.state.lastname}
-                            onChange={this.handleInputLastname}
-                         />
-                    </div>
-
-                    <div className="form_element">
-                        <input
-                            type="email"
-                            placeholder="Enter Email"
-                            value={this.state.email}
-                            onChange={this.handleInputEmail}
-                         />
-                    </div>
-
-                    <div className="form_element">
-                        <input
-                            type="password"
-                            placeholder="Enter Password"
-                            value={this.state.password}
-                            onChange={this.handleInputPassword}
-                         />
-                    </div>
-
-                    <button type="submit">Add user</button>
-                    <div className="error">
-                        {this.state.error}
-                    </div>
-
-                </form>
-                */}                
+                </form>                
             </div>
         );
     }
@@ -190,8 +105,6 @@ function validateEmail(email) {
 function validate(values, props){
     const errors = {};
 
-    //console.log("aaa")
-    
     if (values.name==="") {
         errors.name = "You must enter your name"
     }
@@ -201,8 +114,6 @@ function validate(values, props){
     if(!validateEmail(values.email)){
         errors.email = "You must enter your email"
     } 
-    //console.log(values.password1)
-    //console.log(values.password2)
     if(values.password1!==values.password2 && 
         values.password1!=="undefined" && 
         values.password2!=="undefined"
@@ -233,7 +144,6 @@ function mapStateToProps(state){
     }
 }
 
-//export default connect(mapStateToProps)(Register)
 export default connect(
     mapStateToProps,        
     {insertUser})

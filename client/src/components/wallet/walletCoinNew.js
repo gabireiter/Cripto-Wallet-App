@@ -7,13 +7,8 @@ import { Field, reduxForm } from 'redux-form';
 class WalletCoinNew extends Component {
 
     //PRISTINE / DIRTY // TOUCHED / ERROR
-    componentDidMount(){
-
-    }
-
-
+    
     renderInputField(field){
-        //console.log(field)
         const className = `form-input ${field.meta.touched && field.meta.error ? 'has-error':''}`;
         return (
             <div className={className}>
@@ -27,8 +22,6 @@ class WalletCoinNew extends Component {
     }
 
     renderSelectOptions(field){
-        //<option value="volvo">Volvo</option>
-        //console
         const symbols = this.props.criptos.list.symbols
         return(
             <select {...field.input}>                
@@ -44,12 +37,10 @@ class WalletCoinNew extends Component {
     }
 
     renderComboField=(field)=>{
-        //console.log(field)
         const className = `form-input ${field.meta.touched && field.meta.error ? 'has-error':''}`;
         return (
             <div className={className}>
                 <label>{field.myLabel}</label>
-                {/*<input type="text" {...field.input}/>*/}
                     {this.renderSelectOptions(field)}                                 
                 <div className="error">
                     {field.meta.touched ? field.meta.error:''}
@@ -75,13 +66,11 @@ class WalletCoinNew extends Component {
     }
 
     onSubmit(values){
-        //console.log(values)
         const userId = this.props.user.login.id
         const newvalues = {
             symbol:values.symbols,
             amount:values.amount,
             userId:userId}
-        //console.log(newvalues)
         this.props.insertCoin(newvalues,()=>{            
            this.props.history.push('/user/user-wallet')
         })
@@ -118,7 +107,6 @@ class WalletCoinNew extends Component {
 function validate(values, props){
     const errors = {};
 
-    console.log(values)
     if (!values.symbols) {
         errors.symbols = "You must select a symbol"
     } else {
@@ -135,8 +123,6 @@ function validate(values, props){
 }
 
 function mapStateToProps(state){
-    //console.log(state)
-    //console.log(state.cripto.coin_data)
     return {
         success: state.data,
         criptos: state.cripto        

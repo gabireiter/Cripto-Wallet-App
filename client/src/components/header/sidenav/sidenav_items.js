@@ -43,15 +43,6 @@ const SidenavItems = ({user}) => {
             link:'/user/user-wallet',
             restricted:true
         },
-        /*
-        {
-            type:'navItem',
-            icon:'file-text-o',
-            text:'Add reviews',
-            link:'/user/add',
-            restricted:true
-        },
-        */
         {
             type:'navItem',
             icon:'file-text-o',

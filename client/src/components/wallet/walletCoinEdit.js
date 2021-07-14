@@ -9,7 +9,6 @@ class WalletCoinEdit extends Component {
     //PRISTINE / DIRTY // TOUCHED / ERROR
 
     renderInputField(field){
-        console.log(field)
         const className = `form-input ${field.meta.touched && field.meta.error ? 'has-error':''}`;
         return (
             <div className={className}>
@@ -45,19 +44,11 @@ class WalletCoinEdit extends Component {
 
 
     render(){
-        console.log(this.props)
-        //return(null)
-        
         var coin        
         
         if (this.props.criptos) {
-            //const coin_id = this.props.criptos.coin_data._id
-            //coin = this.props.criptos.wallet.find(
-            //    element=>element._id===coin_id
-            //    )       
             coin = this.props.criptos.coin_data
-            //console.log(this.props.criptos) 
-            //console.log(coin_id)             
+            
             return(
                 <div className="Form">
                     <div className="top">
@@ -90,7 +81,6 @@ class WalletCoinEdit extends Component {
 function validate(values){
     const errors = {};
 
-    console.log(values)
     if(isNaN(values.amount)){
         errors.amount = "This field must be a number"
     } 
@@ -98,8 +88,6 @@ function validate(values){
 }
 
 function mapStateToProps(state){
-    //console.log(state)
-    //console.log(state.cripto.coin_data)
     return {
         success: state.data,
         criptos: state.cripto,
@@ -119,13 +107,3 @@ export default connect(
         })
     ( WalletCoinEdit)
     )
-
-// export default reduxForm({
-//     validate,
-//     form:'UpdateCoin',
-//     enableReinitialize: true    
-// })(
-//     connect(
-//         mapStateToProps,        
-//         {updateCoin})( WalletCoinEdit)
-// )

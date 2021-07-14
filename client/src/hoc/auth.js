@@ -18,11 +18,11 @@ export default function foo(ComposedClass,reload){
 
             if(!nextProps.user.login.isAuth){
                 if(reload){
-                    //Si reload es true, o sea es un componente reservado
+                    //If reload is true, so it's a reserved component
                     this.props.history.push('/login');
                 }
             } else {
-                //Si reload es false, o sea es el componente de login
+                //If reload is false, so it's a login componente
                 if(reload === false) {
                     this.props.history.push('/user')
                 }

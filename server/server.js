@@ -71,23 +71,7 @@ app.get('/api/GetWalletCoins',(req,res)=>{
         })
 })
 
-/*app.get('/api/getBooks',(req,res)=>{
-    let skip = parseInt(req.query.skip)
-    let limit = parseInt(req.query.limit)
-    let order = req.query.order
-    
-    //Order = asc || desc
-    Book.find().skip(skip).sort({_id:order}).limit(limit).exec((err,doc)=>{
-        if (err) return res.status(400).send(err)
-        res.send(doc)
-    })
-})
-*/
-
-// POST //
-
 app.post('/api/WalletCoin_insert',(req, res)=>{
-    console.log(req.body)
     const walletCoin = new WalletCoin({
         symbol: req.body.symbol,
         amount: req.body.amount,    
@@ -112,11 +96,8 @@ app.post('/api/WalletCoin_update',(req, res)=>{
         amount: req.body.amount,    
         userId: req.body.userId
     })
-    console.log(walletCoin)
     
     WalletCoin.findByIdAndUpdate(walletCoin._id,walletCoin,{new: true},(err,doc)=>{
-        console.log(doc)
-        console.log(err)
         if (err) return res.status(400).send(err)
         res.json({
             success: true,
@@ -124,28 +105,6 @@ app.post('/api/WalletCoin_update',(req, res)=>{
         })
     })    
 })
-
-/*
-app.post('/api/book',(req, res)=>{
-    const book = new Book({
-        name: req.body.name,
-        author: req.body.author,    
-        review: req.body.review,
-        pages: req.body.pages,
-        rating: req.body.rating,
-        price: req.body.price,
-        ownerId: req.body.ownerId,
-    })
-    book.save((err,doc)=>{
-        if (err) return res.status(400).send(err)
-        res.status(200).json({
-            post: true,
-            bookId: doc._id
-        })
-    })    
-})
-*/
-
 
 // DELETE //
 
@@ -163,36 +122,12 @@ app.delete('/api/WalletCoin_delete',(req,res)=>{
 /////////////////////////////////////////////////////////////
 // GET //
 
-
-/*
-app.get('/api/getReviewer',(req,res)=>{
-    let id = req.query.id
-    
-    User.findById(id,(err,doc)=>{
-        if (err) return res.status(400).send(err)
-        res.json({
-            name: doc.name,
-            lastname: doc.lastname
-        })
-    })
-})
-*/
-
 app.get('/api/getUsers',(req,res)=>{
     User.find({},(err,users)=>{
         if (err) return res.status(400).send(err)
         res.status(200).send(users)
     })
 })
-
-/*app.get('/api/user_posts',(req,res)=>{
-    //const ownerId = req.query.user
-    Book.find({ownerId:req.query.user}).exec((err,docs)=>{
-        if (err) return res.status(400).send(err)
-        res.send(docs)
-    })
-})
-*/
 
 // REGISTER //
 
@@ -205,16 +140,8 @@ app.post('/api/register',(req, res)=>{
         role: req.body.role,
         token: req.body.token
     })
-    //console.log('hhh')
-    //console.log(user)
 
     user.save((err,doc)=>{
-        // console.log('gggg')
-        // console.log(err)        
-        // console.log('hhhh')
-        // console.log(doc)
-        // console.log('iiii')
-        //console.log(err.name)
         
         if (err) {
             if (err.name === 'ValidationError') {
@@ -222,7 +149,6 @@ app.post('/api/register',(req, res)=>{
                     success:false,
                     message:Object.values(err.errors).map(val => val.message)[0]
                 })
-                //Object.values(err.errors).map(val => val.message)[0]
             } else {
                 return res.json({
                     success:false,
@@ -268,9 +194,7 @@ app.post('/api/check_user_availability',(req, res)=>{
     
     const email = req.query.email
     
-    //console.log(req)
     User.findOne({'email': email},(err,user)=>{
-        //console.log(user)
         if (user) {
             return res.status(400).json({eMailExists:true,message:'Email already exists'})
         } else {
@@ -283,35 +207,12 @@ app.post('/api/check_user_availability',(req, res)=>{
 
 app.get('/api/logout',auth,(req, res)=>{
     
-    //res.send(req.user)
     req.user.deleteToken(req.token,(err,user)=>{
         if (err) return res.status(400).send(err)
         res.sendStatus(200)
     })
 })
 
-// UPDATE //
-/*
-app.post('/api/user_update',(req, res)=>{
-    const book = new Book({
-        _id: req.body._id,
-        name: req.body.name,
-        author: req.body.author,    
-        review: req.body.review,
-        pages: req.body.pages,
-        rating: req.body.rating,
-        price: req.body.price,
-        ownerId: req.body.ownerId,
-    })
-    Book.findByIdAndUpdate(book._id,book,{new: true},(err,doc)=>{
-        if (err) return res.status(400).send(err)
-        res.json({
-            success: true,
-            doc
-        })
-    })    
-})
-*/
 
 // DELETE //
 

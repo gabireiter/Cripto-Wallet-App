@@ -37,8 +37,6 @@ class Login extends Component {
 
     render() {
         let user = this.props.user;
-        console.log('ccc')
-        console.log(this.props)
         const message = this.props.message
         return (
             <div className="rl_container">
@@ -82,8 +80,6 @@ class Login extends Component {
 }
 
 function mapStateToProps(state){
-    console.log('bbb')
-    console.log(state)
     return {
         user:state.user,
         message: state.cripto.message
